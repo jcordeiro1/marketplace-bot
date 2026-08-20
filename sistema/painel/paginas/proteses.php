@@ -38,13 +38,23 @@ if (!empty($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
 }
 $bb_host = (string)($_SERVER['HTTP_HOST'] ?? '');
 $bb_base = ($bb_host !== '') ? ($bb_proto . '://' . $bb_host) : '';
+<<<<<<< HEAD
 $url_painel_assets = $bb_base . '/sistema/painel';
+=======
+$bb_proteses_web_prefix = rtrim((string)$__bb_webBase, '/');
+$bb_proteses_painel_assets = $bb_base . $bb_proteses_web_prefix . '/sistema/painel';
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
 
 // verificar se ele tem a permissão de estar nessa página
 if (@$proteses == 'ocultar') {
 	$__bb_painel_public_url = ($tenant !== '')
+<<<<<<< HEAD
 		? ($bb_base . '/loja/' . $tenant . '/sistema/painel')
 		: ($bb_base . '/sistema/painel');
+=======
+			? ($bb_base . $bb_proteses_web_prefix . '/loja/' . $tenant . '/sistema/painel')
+			: ($bb_base . $bb_proteses_web_prefix . '/sistema/painel');
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
 
 	echo "<script>window.location='" . $__bb_painel_public_url . "'</script>";
 	exit();
@@ -246,7 +256,11 @@ var pag = "<?= $pag ?>";
 var qs_loja = "<?= $qs_loja ?>";
 </script>
 
+<<<<<<< HEAD
 <script src="<?= $url_painel_assets ?>/js/ajax.js"></script>
+=======
+<script src="<?= htmlspecialchars($bb_proteses_painel_assets, ENT_QUOTES, 'UTF-8') ?>/js/ajax.js"></script>
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
 
 <script type="text/javascript">
 $(document).ready(function () {
@@ -264,7 +278,11 @@ function listarProteses(pagina){
 
 	var busca = $("#buscar").val();
 	$.ajax({
+<<<<<<< HEAD
 		url: 'paginas/' + pag + "/listar.php" + qs_loja,
+=======
+		url: bb_url('paginas/' + pag + "/listar.php") + qs_loja,
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
 		method: 'POST',
 		data: {busca: busca, pagina: pagina},
 		dataType: "html",
@@ -282,7 +300,11 @@ $("#form_protese").submit(function (e) {
 	var formData = new FormData(this);
 
 	$.ajax({
+<<<<<<< HEAD
 		url: 'paginas/' + pag + "/salvar.php" + qs_loja,
+=======
+		url: bb_url('paginas/' + pag + "/salvar.php") + qs_loja,
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
 		type: 'POST',
 		data: formData,
 		success: function (mensagem) {
@@ -309,7 +331,11 @@ $("#form_protese").submit(function (e) {
 <script type="text/javascript">
 function excluir(id){
 	$.ajax({
+<<<<<<< HEAD
 		url: 'paginas/' + pag + "/excluir.php" + qs_loja,
+=======
+		url: bb_url('paginas/' + pag + "/excluir.php") + qs_loja,
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
 		method: 'POST',
 		data: {id: id},
 		dataType: "text",
@@ -345,4 +371,8 @@ function inserir(){
 	$('#titulo_inserir').text('Nova Prótese');
 	$('#modalForm').modal('show');
 }
+<<<<<<< HEAD
 </script>
+=======
+</script>
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)

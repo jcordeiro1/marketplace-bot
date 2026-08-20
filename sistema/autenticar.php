@@ -8,6 +8,26 @@
 // - /loja/<slug>/... OU ?loja=...      => sessao TENANT isolada por SLUG (BB_TENANT_<hash>)
 
 $__bb_reqPath = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
+<<<<<<< HEAD
+=======
+$__bb_scriptPath = str_replace('\\', '/', (string)($_SERVER['SCRIPT_NAME'] ?? ''));
+$__bb_systemPos = stripos($__bb_scriptPath, '/sistema/');
+$__bb_webBase = ($__bb_systemPos !== false)
+  ? rtrim(substr($__bb_scriptPath, 0, $__bb_systemPos), '/')
+  : '';
+$__bb_routePath = $__bb_reqPath;
+if ($__bb_webBase !== '' && stripos($__bb_routePath, $__bb_webBase) === 0) {
+  $__bb_routePath = substr($__bb_routePath, strlen($__bb_webBase));
+  if ($__bb_routePath === '') $__bb_routePath = '/';
+}
+
+if (!function_exists('bb_auth_url')) {
+  function bb_auth_url(string $path = ''): string {
+    global $__bb_webBase;
+    return rtrim((string)$__bb_webBase, '/') . '/' . ltrim($path, '/');
+  }
+}
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
 
 // Detecta SLUG cedo (somente por URI/GET/POST)
 if (!function_exists('bb_sess_clean_slug')) {
@@ -23,7 +43,11 @@ if (!empty($_GET['loja'])) {
 } elseif (!empty($_POST['loja'])) {
   $__bb_slug = bb_sess_clean_slug($_POST['loja']);
 } else {
+<<<<<<< HEAD
   if (preg_match('~^/loja/([a-z0-9_-]+)(?:/|$)~i', $__bb_reqPath, $mSlug)) {
+=======
+  if (preg_match('~^/loja/([a-z0-9_-]+)(?:/|$)~i', $__bb_routePath, $mSlug)) {
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
     $__bb_slug = bb_sess_clean_slug($mSlug[1]);
   }
 }
@@ -37,12 +61,20 @@ if ($__bb_slug !== '') {
 // Contexto loja: via URL /loja/<slug>/..., ou ?loja=..., ou POST loja
 $__bb_hasLoja = (
   $__bb_slug !== '' ||
+<<<<<<< HEAD
   (bool)preg_match('~^/loja/([a-z0-9_-]+)(?:/|$)~i', $__bb_reqPath) ||
+=======
+  (bool)preg_match('~^/loja/([a-z0-9_-]+)(?:/|$)~i', $__bb_routePath) ||
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
   !empty($_GET['loja']) ||
   !empty($_POST['loja'])
 );
 
+<<<<<<< HEAD
 $__bb_isSistema = (strpos($__bb_reqPath, '/sistema') === 0);
+=======
+$__bb_isSistema = (strpos($__bb_routePath, '/sistema') === 0);
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
 
 // O endpoint só aceita dois contextos:
 // - com slug explícito: TENANT;
@@ -118,14 +150,23 @@ function detect_slug(): string {
   }
 
   // 2) URI /loja/<slug>/
+<<<<<<< HEAD
   $uri = (string)($_SERVER['REQUEST_URI'] ?? '');
+=======
+  global $__bb_routePath;
+  $uri = (string)$__bb_routePath;
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
   if ($uri !== '' && preg_match('~^/loja/([a-z0-9_-]+)/~i', $uri, $m)) {
     $s = clean_slug((string)$m[1]);
     if ($s !== '') return $s;
   }
 
   // A sessão só pode completar o slug quando a própria URL já está em /loja/{slug}/.
+<<<<<<< HEAD
   $uriPath = parse_url((string)($_SERVER['REQUEST_URI'] ?? ''), PHP_URL_PATH);
+=======
+  $uriPath = (string)$__bb_routePath;
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
   $isLojaCtx = (is_string($uriPath) && strpos($uriPath, '/loja/') === 0);
 
   if ($isLojaCtx && !empty($_SESSION['tenant_slug'])) {
@@ -138,9 +179,15 @@ function detect_slug(): string {
 
 function redirect_erro(string $tipo, string $slug = ''): void {
   if ($slug !== '') {
+<<<<<<< HEAD
     header("Location: /loja/" . rawurlencode($slug) . "/sistema/?erro={$tipo}");
   } else {
     header("Location: /sistema/?erro={$tipo}");
+=======
+    header('Location: ' . bb_auth_url('loja/' . rawurlencode($slug) . "/sistema/?erro={$tipo}"));
+  } else {
+    header('Location: ' . bb_auth_url("sistema/?erro={$tipo}"));
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
   }
   exit();
 }
@@ -538,7 +585,11 @@ if ($slug !== '') {
       $_SESSION['master_id'] = (int)($_SESSION['master_id'] ?? 0);
 
       session_write_close();
+<<<<<<< HEAD
       header("Location: /loja/" . rawurlencode($slug) . "/painel/");
+=======
+      header('Location: ' . bb_auth_url('loja/' . rawurlencode($slug) . '/painel/home/'));
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
       exit();
     }
 
@@ -716,8 +767,14 @@ if ($slug !== '' && empty($_SESSION['tenant_slug'])) {
 session_write_close();
 
 if ($slug !== '') {
+<<<<<<< HEAD
   header("Location: /loja/" . rawurlencode($slug) . "/painel/");
 } else {
   header("Location: /sistema/painel/");
+=======
+  header('Location: ' . bb_auth_url('loja/' . rawurlencode($slug) . '/painel/home/'));
+} else {
+  header('Location: ' . bb_auth_url('sistema/painel/?pag=home'));
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
 }
 exit();

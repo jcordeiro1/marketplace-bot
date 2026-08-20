@@ -6,6 +6,22 @@
 // ======================================================================
 
 $__bb_reqPath = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
+<<<<<<< HEAD
+=======
+$__bb_scriptPath = str_replace('\\', '/', (string)($_SERVER['SCRIPT_NAME'] ?? ''));
+$__bb_systemPos = stripos($__bb_scriptPath, '/sistema/');
+$__bb_webBase = ($__bb_systemPos !== false)
+  ? rtrim(substr($__bb_scriptPath, 0, $__bb_systemPos), '/')
+  : '';
+$__bb_routePath = $__bb_reqPath;
+if ($__bb_webBase !== '' && stripos($__bb_routePath, $__bb_webBase) === 0) {
+  $__bb_routePath = substr($__bb_routePath, strlen($__bb_webBase));
+  if ($__bb_routePath === '') $__bb_routePath = '/';
+}
+$__bb_hostLocal = strtolower(preg_replace('/:\\d+$/', '', (string)($_SERVER['HTTP_HOST'] ?? '')));
+$__bb_isLocal = in_array($__bb_hostLocal, ['localhost', '127.0.0.1', '::1'], true)
+  || substr($__bb_hostLocal, -5) === '.test';
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
 
 if (!function_exists('bb_sess_clean_slug')) {
   function bb_sess_clean_slug($v) {
@@ -21,6 +37,7 @@ if (!empty($_GET['loja'])) {
   $__bb_reqSlug = bb_sess_clean_slug($_GET['loja']);
 } elseif (!empty($_POST['loja'])) {
   $__bb_reqSlug = bb_sess_clean_slug($_POST['loja']);
+<<<<<<< HEAD
 } elseif (preg_match('~^/loja/([a-z0-9_-]+)(?:/|$)~i', $__bb_reqPath, $mSlug)) {
   $__bb_reqSlug = bb_sess_clean_slug($mSlug[1]);
 }
@@ -28,6 +45,15 @@ if (!empty($_GET['loja'])) {
 $__bb_lojaByPath = (bool)preg_match('~^/loja/([a-z0-9_-]+)(?:/|$)~i', $__bb_reqPath);
 $__bb_hasLoja = ($__bb_reqSlug !== '') || $__bb_lojaByPath;
 $__bb_isSistema = (strpos($__bb_reqPath, '/sistema') === 0);
+=======
+} elseif (preg_match('~^/loja/([a-z0-9_-]+)(?:/|$)~i', $__bb_routePath, $mSlug)) {
+  $__bb_reqSlug = bb_sess_clean_slug($mSlug[1]);
+}
+
+$__bb_lojaByPath = (bool)preg_match('~^/loja/([a-z0-9_-]+)(?:/|$)~i', $__bb_routePath);
+$__bb_hasLoja = ($__bb_reqSlug !== '') || $__bb_lojaByPath;
+$__bb_isSistema = (strpos($__bb_routePath, '/sistema') === 0);
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
 
 // /sistema sem slug explícito é sempre MASTER.
 // Em domínio próprio, conexao.php confirma o host e troca para a sessão do tenant.
@@ -85,7 +111,11 @@ if (!empty($_GET['loja'])) {
   $lojaSlug = (string)$_GET['loja'];
 } else {
   // tenta detectar pela URL /loja/slug/sistema/...
+<<<<<<< HEAD
   $uri = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
+=======
+  $uri = $__bb_routePath;
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
   $seg = array_values(array_filter(explode('/', trim($uri, '/'))));
   if (isset($seg[0], $seg[1]) && $seg[0] === 'loja' && $seg[1] !== '') {
     $lojaSlug = (string)$seg[1];
@@ -120,7 +150,11 @@ if (!isset($pdo) || !($pdo instanceof PDO)) {
       <h1>Sistema não conectado</h1>
       <p>Não foi possível acessar o banco da loja: <b><?=htmlspecialchars($loja, ENT_QUOTES, 'UTF-8')?></b></p>
       <p>Verifique se o banco foi criado e se o usuário possui as permissões necessárias.</p>
+<<<<<<< HEAD
       <a class="btn" href="/marketplace.php">Voltar ao Marketplace</a>
+=======
+      <a class="btn" href="<?php echo htmlspecialchars($__bb_webBase . '/marketplace.php', ENT_QUOTES, 'UTF-8'); ?>">Voltar ao Marketplace</a>
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
     </div>
   </body>
   </html>
@@ -206,7 +240,11 @@ elseif ($favExt === 'svg') $favType = 'image/svg+xml';
         <p class="recuperar" style="font-weight:bold; margin-top:10px;">Acesso ao Painel</p>
 
         <div class="panel-body">
+<<<<<<< HEAD
           <form accept-charset="UTF-8" role="form" action="/sistema/autenticar.php<?php echo $lojaQS; ?>" method="post">
+=======
+          <form accept-charset="UTF-8" role="form" action="<?php echo htmlspecialchars($__bb_webBase . '/sistema/autenticar.php' . $lojaQS, ENT_QUOTES, 'UTF-8'); ?>" method="post">
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
           <input type="hidden" name="loja" value="<?php echo htmlspecialchars($lojaSlug ?? '', ENT_QUOTES, 'UTF-8'); ?>">
 
 
@@ -218,8 +256,15 @@ elseif ($favExt === 'svg') $favType = 'image/svg+xml';
                 <input class="form-control" placeholder="Senha" name="senha" type="password" required>
               </div>
 
+<<<<<<< HEAD
               <div class="g-recaptcha" data-sitekey="6LdltT0fAAAAAGA1M26pB2eoBeJSdVW3XWMcxbS-"></div>
               <br>
+=======
+              <?php if (!$__bb_isLocal): ?>
+              <div class="g-recaptcha" data-sitekey="6LdltT0fAAAAAGA1M26pB2eoBeJSdVW3XWMcxbS-"></div>
+              <br>
+              <?php endif; ?>
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
 
               <input class="btn btn-lg btn-primary btn-block" type="submit" value="Login">
             </fieldset>
@@ -259,7 +304,13 @@ elseif ($favExt === 'svg') $favType = 'image/svg+xml';
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.6/dist/sweetalert2.all.min.js"></script>
+<<<<<<< HEAD
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+=======
+<?php if (!$__bb_isLocal): ?>
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<?php endif; ?>
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
 
 <script>
 $(document).ready(function(){

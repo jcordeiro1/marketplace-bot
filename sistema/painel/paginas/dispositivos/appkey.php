@@ -26,8 +26,12 @@ if ($tenant !== '' && empty($_GET['loja'])) {
 	$_GET['loja'] = $tenant;
 }
 
+<<<<<<< HEAD
 $bbRoot = rtrim($_SERVER['DOCUMENT_ROOT'] ?? '', '/');
 require_once($bbRoot . '/sistema/conexao.php');
+=======
+require_once __DIR__ . '/../../../conexao.php';
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
 
 if (!isset($pdo) || !$pdo) {
 	echo json_encode(['status' => 500, 'message' => 'Conexão não inicializada'], JSON_UNESCAPED_UNICODE);
@@ -54,8 +58,13 @@ try {
 			// gera appkey único (mantém ideia do sistema)
 			$appkey = uniqid('appkey_', true);
 
+<<<<<<< HEAD
 			$ins = $pdo->prepare("INSERT INTO dispositivos (appkey) VALUES (:appkey)");
 			$ins->execute([':appkey' => $appkey]);
+=======
+			$ins = $pdo->prepare("INSERT INTO dispositivos (appkey, status) VALUES (:appkey, :status)");
+			$ins->execute([':appkey' => $appkey, ':status' => '']);
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
 
 			// salva no config (token) - atualiza primeira linha
 			if (bb_table_exists($pdo, 'config')) {

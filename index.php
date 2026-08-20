@@ -1180,7 +1180,11 @@ body::before{
                     <li><i class="fa-solid fa-users-gear"></i> <strong>Comissões:</strong> Cálculo automático da equipe.</li>
                     <li><i class="fa-solid fa-file-invoice-dollar"></i> <strong>Despesas e Custos:</strong> Organize contas a pagar.</li>
                 </ul>
+<<<<<<< HEAD
                 <a href="sistema" class="btn btn-outline" style="margin-top: 20px;" target="_blank">Testar Painel</a>
+=======
+                <a href="<?php echo rtrim(dirname($_SERVER['SCRIPT_NAME'] ?? '/'), '/\\') . '/sistema/'; ?>" class="btn btn-outline" style="margin-top: 20px;" target="_blank">Testar Painel</a>
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
             </div>
             <div class="feature-img">
                 <div class="phone-frame">
@@ -2572,4 +2576,7 @@ require_once __DIR__ . '/marketplace/footer.php';
   }
 })();
 </script>
+<<<<<<< HEAD
 
+=======
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)

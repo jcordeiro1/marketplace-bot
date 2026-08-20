@@ -33,9 +33,14 @@ if ($telefone === '' || strlen($telefone) < 10) {
   exit;
 }
 
+<<<<<<< HEAD
 $bbRoot = rtrim((string)($_SERVER['DOCUMENT_ROOT'] ?? ''), '/');
 $conexao = $bbRoot . '/sistema/conexao.php';
 $apiTexto = $bbRoot . '/ajax/api-texto.php';
+=======
+$conexao = __DIR__ . '/../../../conexao.php';
+$apiTexto = __DIR__ . '/../../../../ajax/api-texto.php';
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
 
 if (!is_file($conexao)) {
   echo json_encode(['ok' => false, 'message' => 'conexao.php não encontrado em /sistema/.']);

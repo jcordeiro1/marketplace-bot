@@ -4,9 +4,24 @@ require_once __DIR__ . '/_context_bootstrap.php';
 // IMPORTANTE: NÃO iniciar sessão aqui.
 // A sessão/tenant deve ser decidida SOMENTE pelo conexao.php (bootstrap central).
 require_once __DIR__ . '/../../conexao.php';
+<<<<<<< HEAD
 //verificar se ele tem a permissão de estar nessa página
 if(@$usuarios == 'ocultar'){
     echo "<script>window.location='<?php echo $bb_painel_public_url; ?>/'</script>";
+=======
+
+// Base real do painel, incluindo a subpasta do projeto no XAMPP.
+// Ex.: /marketplace/sistema/painel
+$bb_usuarios_painel_base = rtrim((string)$__bb_webBase, '/') . '/sistema/painel';
+$bb_usuarios_ajax_arquivo = __DIR__ . '/../js/ajax.js';
+$bb_usuarios_ajax_versao = is_file($bb_usuarios_ajax_arquivo)
+	? (string)filemtime($bb_usuarios_ajax_arquivo)
+	: (string)time();
+
+//verificar se ele tem a permissão de estar nessa página
+if(@$usuarios == 'ocultar'){
+    echo '<script>window.location=' . json_encode($bb_usuarios_painel_base . '/') . '</script>';
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
     exit();
 }
 
@@ -335,8 +350,14 @@ $pag = 'usuarios';
 <script type="text/javascript">
 	var pag = "<?=$pag?>";
 	window.pag = pag;
+<<<<<<< HEAD
 </script>
 <script src="js/ajax.js"></script>
+=======
+	window.bbBasePainel = <?= json_encode($bb_usuarios_painel_base, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?>;
+</script>
+<script src="<?= htmlspecialchars($bb_usuarios_painel_base, ENT_QUOTES, 'UTF-8') ?>/js/ajax.js?v=<?= rawurlencode($bb_usuarios_ajax_versao) ?>"></script>
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
 
 
 <script type="text/javascript">
@@ -461,7 +482,11 @@ $pag = 'usuarios';
 <script type="text/javascript">
 	function listarPermissoes(id){
 		$.ajax({
+<<<<<<< HEAD
 			url: 'paginas/' + pag + "/listar-permissoes.php",
+=======
+			url: bb_url('paginas/' + pag + "/listar-permissoes.php"),
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
 			method: 'POST',
 			data: {id},
 			dataType: "html",
@@ -490,7 +515,11 @@ $pag = 'usuarios';
 
 	function adicionarPermissoes(id){
 		$.ajax({
+<<<<<<< HEAD
 			url: 'paginas/' + pag + "/add-permissoes.php",
+=======
+			url: bb_url('paginas/' + pag + "/add-permissoes.php"),
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
 			method: 'POST',
 			data: {id},
 			dataType: "html",
@@ -504,7 +533,11 @@ $pag = 'usuarios';
 
 	function limparPermissoes(id){
 		$.ajax({
+<<<<<<< HEAD
 			url: 'paginas/' + pag + "/limpar-permissoes.php",
+=======
+			url: bb_url('paginas/' + pag + "/limpar-permissoes.php"),
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
 			method: 'POST',
 			data: {id},
 			dataType: "html",
@@ -519,7 +552,11 @@ $pag = 'usuarios';
 	function adicionarPermissao(idpermissao, idusuario){
 		
 		$.ajax({
+<<<<<<< HEAD
 			url: 'paginas/' + pag + "/add-permissao.php",
+=======
+			url: bb_url('paginas/' + pag + "/add-permissao.php"),
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
 			method: 'POST',
 			data: {idpermissao, idusuario},
 			dataType: "html",
@@ -530,4 +567,8 @@ $pag = 'usuarios';
 		});	
 	}
 
+<<<<<<< HEAD
 </script>
+=======
+</script>
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)

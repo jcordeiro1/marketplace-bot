@@ -4,10 +4,31 @@
 // ✅ Também isola TENANT por SLUG: BB_TENANT_<hash> (evita misturar lojas no mesmo navegador)
 
 $__bb_reqPath = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
+<<<<<<< HEAD
+=======
+$__bb_scriptPath = str_replace('\\', '/', (string)($_SERVER['SCRIPT_NAME'] ?? ''));
+$__bb_systemPos = stripos($__bb_scriptPath, '/sistema/');
+$__bb_webBase = ($__bb_systemPos !== false)
+  ? rtrim(substr($__bb_scriptPath, 0, $__bb_systemPos), '/')
+  : '';
+$__bb_routePath = $__bb_reqPath;
+if ($__bb_webBase !== '' && stripos($__bb_routePath, $__bb_webBase) === 0) {
+  $__bb_routePath = substr($__bb_routePath, strlen($__bb_webBase));
+  if ($__bb_routePath === '') $__bb_routePath = '/';
+}
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
 $__bb_refPath = '';
 if (!empty($_SERVER['HTTP_REFERER'])) {
   $__bb_refPath = parse_url($_SERVER['HTTP_REFERER'], PHP_URL_PATH) ?: '';
 }
+<<<<<<< HEAD
+=======
+$__bb_refRoutePath = $__bb_refPath;
+if ($__bb_webBase !== '' && stripos($__bb_refRoutePath, $__bb_webBase) === 0) {
+  $__bb_refRoutePath = substr($__bb_refRoutePath, strlen($__bb_webBase));
+  if ($__bb_refRoutePath === '') $__bb_refRoutePath = '/';
+}
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
 
 if (!function_exists('bb_sess_clean_slug')) {
   function bb_sess_clean_slug($v) {
@@ -23,9 +44,15 @@ if (!empty($_GET['loja'])) {
 } elseif (!empty($_POST['loja'])) {
   $__bb_reqSlug = bb_sess_clean_slug($_POST['loja']);
 } else {
+<<<<<<< HEAD
   if (preg_match('~^/loja/([a-z0-9_-]+)(?:/|$)~i', $__bb_reqPath, $mSlug)) {
     $__bb_reqSlug = bb_sess_clean_slug($mSlug[1]);
   } elseif (!empty($__bb_refPath) && preg_match('~^/loja/([a-z0-9_-]+)(?:/|$)~i', $__bb_refPath, $mSlug2)) {
+=======
+  if (preg_match('~^/loja/([a-z0-9_-]+)(?:/|$)~i', $__bb_routePath, $mSlug)) {
+    $__bb_reqSlug = bb_sess_clean_slug($mSlug[1]);
+  } elseif (!empty($__bb_refRoutePath) && preg_match('~^/loja/([a-z0-9_-]+)(?:/|$)~i', $__bb_refRoutePath, $mSlug2)) {
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
     $__bb_reqSlug = bb_sess_clean_slug($mSlug2[1]);
   }
 }
@@ -55,6 +82,7 @@ if (!empty($_GET['ctx'])) {
 }
 if (!in_array($__bb_ctx, ['tenant','master'], true)) $__bb_ctx = '';
 
+<<<<<<< HEAD
 $__bb_lojaByPath = (bool)preg_match('~^/loja/([a-z0-9_-]+)(?:/|$)~i', $__bb_reqPath)
                 || (bool)preg_match('~^/loja/([a-z0-9_-]+)(?:/|$)~i', $__bb_refPath);
 
@@ -82,6 +110,22 @@ if ($__bb_isSistema && !$__bb_lojaByPath && empty($_GET['loja']) && empty($_POST
     $__bb_hasLoja = true;
   }
 }
+=======
+$__bb_lojaByPath = (bool)preg_match('~^/loja/([a-z0-9_-]+)(?:/|$)~i', $__bb_routePath)
+                || (bool)preg_match('~^/loja/([a-z0-9_-]+)(?:/|$)~i', $__bb_refRoutePath);
+
+$__bb_hasLoja = $__bb_lojaByPath || !empty($_GET['loja']) || !empty($_POST['loja']);
+$__bb_isSistema = (strpos($__bb_routePath, '/sistema') === 0) || (strpos($__bb_refRoutePath, '/sistema') === 0);
+
+// /sistema no host principal, sem slug ou parâmetro de loja, é sempre MASTER.
+// Cookies antigos de tenant não podem alterar a rota administrativa explícita.
+$__bb_forceMaster = (
+  $__bb_isSistema
+  && !$__bb_lojaByPath
+  && empty($_GET['loja'])
+  && empty($_POST['loja'])
+);
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
 
 // Sessão desejada (tenant por slug; se não tiver slug, tenta resolver pelo único cookie BB_TENANT_*)
 $__bb_desiredSession = $__bb_forceMaster ? 'BB_MASTER' : ($__bb_hasLoja ? ($__bb_reqSlug !== '' ? $__bb_tenantSessionName : ($__bb_oneTenantCookie !== '' ? $__bb_oneTenantCookie : 'BB_TENANT')) : 'BB_SITE');
@@ -124,7 +168,11 @@ if (!headers_sent()) {
   - MASTER: quando é /sistema/... (sem /loja/), NÃO herda tenant antigo da sessão
 */
 
+<<<<<<< HEAD
 $__uriPath = (string)(parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/');
+=======
+$__uriPath = $__bb_routePath;
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
 
 /* Detecta slug na URL /loja/<slug>/... */
 $__tenantFromUri = '';
@@ -234,11 +282,17 @@ $mostrar_marketplace = (
 	&& strtolower(trim($email_usuario)) === 'jacy@jc.tec.br'
 );
 
+<<<<<<< HEAD
 // No Link Master, a página inicial deve ser uma página global do Marketplace.
 // A home.php é exclusiva da barbearia e consulta somente o Banco Individual do tenant.
 if ($mostrar_marketplace) {
 	$pag_inicial = 'marketplace';
 }
+=======
+// A entrada do painel abre sempre a Home.
+// O Marketplace continua disponível no menu administrativo próprio.
+$pag_inicial = 'home';
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
 
 if (@$_SESSION['nivel'] != 'Administrador') {
 	require_once __DIR__ . '/verificar-permissoes.php';
@@ -271,11 +325,14 @@ if ($pag === '') {
 // Sanitização (mantém padrão do sistema)
 $pag = preg_replace('/[^a-z0-9_-]/i', '', $pag);
 
+<<<<<<< HEAD
 // A rota Home do Master também abre a gestão global, nunca a home operacional de uma loja.
 if ($mostrar_marketplace && $pag === 'home') {
 	$pag = 'marketplace';
 }
 
+=======
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
 // Estado visual do menu Master do Marketplace.
 $bb_marketplace_menu_active = ($mostrar_marketplace && in_array($pag, ['marketplace', 'marketplace_diagnostico'], true)) ? 'active' : '';
 $bb_marketplace_inicio_active = ($mostrar_marketplace && $pag === 'marketplace') ? 'active' : '';
@@ -2047,4 +2104,7 @@ if ($bb_show) {
   }, true);
 })();
 </script>
+<<<<<<< HEAD
 
+=======
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)

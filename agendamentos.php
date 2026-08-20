@@ -108,9 +108,18 @@ require_once __DIR__ . '/sistema/conexao.php';
 
 // Base absoluta para assets estáticos (CSS/JS/imagens) e base dinâmica para rotas TENANT.
 // Assets ficam na raiz pública. Rotas/AJAX respeitam /loja/{slug}/ quando a URL atual estiver no contexto da loja.
+<<<<<<< HEAD
 $BASE = '/';
 $__bb_useTenantPath = ($loja !== '' && $__bb_lojaByPath);
 $BB_ROUTE_BASE = $__bb_useTenantPath ? ('/loja/' . rawurlencode($loja) . '/') : '/';
+=======
+$__bb_script_dir = str_replace('\\', '/', dirname((string)($_SERVER['SCRIPT_NAME'] ?? '/')));
+$BASE = ($__bb_script_dir === '/' || $__bb_script_dir === '.' || $__bb_script_dir === '')
+  ? '/'
+  : rtrim($__bb_script_dir, '/') . '/';
+$__bb_useTenantPath = ($loja !== '' && $__bb_lojaByPath);
+$BB_ROUTE_BASE = $__bb_useTenantPath ? ($BASE . 'loja/' . rawurlencode($loja) . '/') : $BASE;
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
 $QS_LOJA = ($loja !== '' && !$__bb_useTenantPath) ? ('?loja=' . rawurlencode($loja)) : '';
 
 if (!function_exists('bb_agendamento_public_asset')) {
@@ -1399,7 +1408,11 @@ function irParaProximaEtapa(etapaAtual) {
 <script>
 // Registra o SW (mantém)
 if ('serviceWorker' in navigator) {
+<<<<<<< HEAD
   navigator.serviceWorker.register('/sw.js')
+=======
+  navigator.serviceWorker.register('<?php echo $BASE; ?>sw.js')
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
   .then(reg => console.log('✅ SW registrado:', reg.scope))
   .catch(err => console.error('❌ Erro ao registrar SW:', err));
 }
@@ -1430,7 +1443,11 @@ window.addEventListener('appinstalled', () => {
 <script>
 // Mantém segundo register, só corrige o caminho (pra não tentar /loja/<slug>/sw.js)
 if ('serviceWorker' in navigator) {
+<<<<<<< HEAD
   navigator.serviceWorker.register('/sw.js')
+=======
+  navigator.serviceWorker.register('<?php echo $BASE; ?>sw.js')
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
   .then(reg => { console.log('✅ Service Worker registrado:', reg.scope); })
   .catch(err => { console.error('❌ Erro ao registrar Service Worker:', err); });
 }

@@ -44,11 +44,16 @@ if (!empty($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
 }
 $bb_host = (string)($_SERVER['HTTP_HOST'] ?? '');
 $bb_base = ($bb_host !== '') ? ($bb_proto . '://' . $bb_host) : '';
+<<<<<<< HEAD
+=======
+$bb_web_prefix = rtrim((string)$__bb_webBase, '/');
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
 
 // tenant via URL/GET (usado para prefixo /loja/{slug})
 $__tenantFromUri = $tenant;
 
 $bb_tenant_prefix = ($__tenantFromUri !== '') ? ('/loja/' . $__tenantFromUri) : '';
+<<<<<<< HEAD
 $url_sistema = $bb_base . $bb_tenant_prefix . '/sistema/';       // sempre com barra no final
 $url_painel_assets = $bb_base . '/sistema/painel';
 
@@ -58,12 +63,27 @@ $webhook_menuia_url = $bb_base . '/webhook/menuia_gateway.php';               //
 // Permissão de módulo (mantém padrão existente)
 if (@$dispositivos == 'ocultar') {
 	$__bb_painel_public_url = isset($bb_painel_public_url) ? $bb_painel_public_url : ($bb_base . $bb_tenant_prefix . '/sistema/painel');
+=======
+$url_sistema = $bb_base . $bb_web_prefix . $bb_tenant_prefix . '/sistema/';       // sempre com barra no final
+$url_painel_assets = $bb_base . $bb_web_prefix . '/sistema/painel';
+
+// webhook Menuia (arquivo em /public_html/webhook/menuia.php)
+$webhook_menuia_url = $bb_base . $bb_web_prefix . '/webhook/menuia_gateway.php';               // assets reais do painel
+
+// Permissão de módulo (mantém padrão existente)
+if (@$dispositivos == 'ocultar') {
+	$__bb_painel_public_url = isset($bb_painel_public_url) ? $bb_painel_public_url : ($bb_base . $bb_web_prefix . $bb_tenant_prefix . '/sistema/painel');
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
 	echo "<script>window.location='" . $__bb_painel_public_url . "'</script>";
 	exit();
 }
 
+<<<<<<< HEAD
 $bbRoot = rtrim($_SERVER['DOCUMENT_ROOT'] ?? '', '/');
 require_once($bbRoot . "/sistema/conexao.php");
+=======
+require_once __DIR__ . '/../../conexao.php';
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
 
 if (!isset($pdo) || !$pdo) {
 	echo "<div class=\"alert alert-danger\">Erro: conexão não inicializada.</div>";
@@ -168,7 +188,11 @@ function add(appkey) {
 	$('#statusMessage').hide();
 
 	$.ajax({
+<<<<<<< HEAD
 		url: 'paginas/' + pag + '/appkey.php' + qs_loja,
+=======
+		url: bb_url('paginas/' + pag + '/appkey.php') + qs_loja,
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
 		method: 'POST',
 		data: { appkey: appkey },
 		dataType: 'json',
@@ -194,7 +218,11 @@ function add(appkey) {
 
 						// salva no banco de dados
 						$.ajax({
+<<<<<<< HEAD
 							url: 'paginas/' + pag + '/atualizar.php' + qs_loja,
+=======
+							url: bb_url('paginas/' + pag + '/atualizar.php') + qs_loja,
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
 							method: 'POST',
 							data: { appkey: resposta.appkey },
 							dataType: 'json',
@@ -247,7 +275,11 @@ function checar_conexao(appkey, callback) {
 			if (response.status === 200) {
 
 				$.ajax({
+<<<<<<< HEAD
 					url: 'paginas/' + pag + '/atualizar_numero.php' + qs_loja,
+=======
+					url: bb_url('paginas/' + pag + '/atualizar_numero.php') + qs_loja,
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
 					method: 'POST',
 					data: { appkey: appkey, dados: response.dados},
 					dataType: 'json',
@@ -341,7 +373,11 @@ function testarApi(el, appkey) {
 		}
 
 		$.ajax({
+<<<<<<< HEAD
 			url: 'paginas/' + pag + '/testar.php' + qs_loja,
+=======
+			url: bb_url('paginas/' + pag + '/testar.php') + qs_loja,
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
 			method: 'POST',
 			dataType: 'json',
 			data: {
@@ -366,4 +402,8 @@ function testarApi(el, appkey) {
 		alert('⚠️ Erro interno no teste: ' + e);
 	}
 }
+<<<<<<< HEAD
 </script>
+=======
+</script>
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)

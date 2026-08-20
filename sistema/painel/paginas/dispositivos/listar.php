@@ -102,7 +102,11 @@ HTML;
   function alterarStatus(status, id = '') {
     if (status !== 'bloqueado') {
       $.ajax({
+<<<<<<< HEAD
         url: 'paginas/' + pag + '/status.php',
+=======
+        url: bb_url('paginas/' + pag + '/status.php'),
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
         method: 'POST',
         data: { status: status, id: id },
         dataType: 'text',
@@ -111,7 +115,11 @@ HTML;
       });
     } else {
       $.ajax({
+<<<<<<< HEAD
         url: 'paginas/' + pag + '/excluir.php',
+=======
+        url: bb_url('paginas/' + pag + '/excluir.php'),
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
         method: 'POST',
         data: { id: id },
         dataType: 'text',
@@ -136,7 +144,11 @@ HTML;
     $icon.attr('class', 'fa fa-circle-notch fa-spin');
 
     $.ajax({
+<<<<<<< HEAD
       url: 'paginas/' + pag + '/testar.php',
+=======
+      url: bb_url('paginas/' + pag + '/testar.php'),
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
       method: 'POST',
       data: { seletor_api: seletor_api, token: token, instancia: instancia, telefone_sistema: telefone_sistema },
       dataType: 'text', // retorna texto; abaixo tentamos parsear como JSON

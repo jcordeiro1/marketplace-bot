@@ -9,7 +9,32 @@
 //   quando a conexão administrativa opcional de layout não estiver ativa.
 // ======================================================================
 $__bb_reqPath = (string)(parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/');
+<<<<<<< HEAD
 $__bb_isSystemRoute = (bool)preg_match('~^/sistema(?:/|$)~i', $__bb_reqPath);
+=======
+
+// Descobre automaticamente a pasta pública do projeto no XAMPP.
+// Ex.: C:/xampp/htdocs/marketplace => /marketplace.
+$__bb_documentRoot = realpath((string)($_SERVER['DOCUMENT_ROOT'] ?? '')) ?: '';
+$__bb_projectRoot = realpath(dirname(__DIR__)) ?: dirname(__DIR__);
+$bb_web_base = '';
+if ($__bb_documentRoot !== '') {
+    $bb_documentRootNormalizado = str_replace('\\', '/', rtrim($__bb_documentRoot, '/\\'));
+    $bb_projectRootNormalizado = str_replace('\\', '/', rtrim($__bb_projectRoot, '/\\'));
+    if (stripos($bb_projectRootNormalizado, $bb_documentRootNormalizado) === 0) {
+        $bb_web_base = substr($bb_projectRootNormalizado, strlen($bb_documentRootNormalizado));
+        $bb_web_base = '/' . trim((string)$bb_web_base, '/');
+        if ($bb_web_base === '/') $bb_web_base = '';
+    }
+}
+
+$__bb_routePath = $__bb_reqPath;
+if ($bb_web_base !== '' && stripos($__bb_routePath, $bb_web_base) === 0) {
+    $__bb_routePath = substr($__bb_routePath, strlen($bb_web_base));
+    if ($__bb_routePath === '') $__bb_routePath = '/';
+}
+$__bb_isSystemRoute = (bool)preg_match('~^/sistema(?:/|$)~i', $__bb_routePath);
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
 
 $baseConn = __DIR__ . '/../sistema/conexao.php';
 if (!is_file($baseConn)) {
@@ -38,7 +63,11 @@ if (!empty($_GET['loja'])) {
     $__bb_reqSlug = bb_sess_clean_slug($_GET['loja']);
 } elseif (!empty($_POST['loja'])) {
     $__bb_reqSlug = bb_sess_clean_slug($_POST['loja']);
+<<<<<<< HEAD
 } elseif (preg_match('~^/loja/([a-z0-9_-]+)(?:/|$)~i', $__bb_reqPath, $__bb_slugMatch)) {
+=======
+} elseif (preg_match('~^/loja/([a-z0-9_-]+)(?:/|$)~i', $__bb_routePath, $__bb_slugMatch)) {
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
     $__bb_reqSlug = bb_sess_clean_slug($__bb_slugMatch[1]);
 }
 
@@ -199,7 +228,12 @@ if (!empty($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
     if ($xfp === 'https' || $xfp === 'http') $bb_proto = $xfp;
 }
 $bb_host = (string)($_SERVER['HTTP_HOST'] ?? '');
+<<<<<<< HEAD
 $bb_base = ($bb_host !== '') ? ($bb_proto . '://' . $bb_host) : '';
+=======
+$bb_origin = ($bb_host !== '') ? ($bb_proto . '://' . $bb_host) : '';
+$bb_base = $bb_origin . $bb_web_base;
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
 
 // ✅ caminhos de imagem
 // Correção importante:
@@ -242,7 +276,12 @@ if (!function_exists('bb_asset_url_marketplace')) {
 
 if (!function_exists('bb_asset_fs_marketplace')) {
     function bb_asset_fs_marketplace($arquivo, $pasta_padrao = 'sistema/img') {
+<<<<<<< HEAD
         $root = rtrim((string)($_SERVER['DOCUMENT_ROOT'] ?? ''), '/');
+=======
+        $root = realpath(dirname(__DIR__)) ?: dirname(__DIR__);
+        $root = rtrim(str_replace('\\', '/', (string)$root), '/');
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
         $arquivo = trim((string)$arquivo);
 
         if ($root === '' || $arquivo === '' || preg_match('~^https?://~i', $arquivo)) {
@@ -354,7 +393,11 @@ $bb_tenant_rota_com_slug = false;
 
 if ($bb_slug_link_atual !== '') {
     $bb_tenant_rota_com_slug =
+<<<<<<< HEAD
         (bool)preg_match('~^/loja/' . preg_quote($bb_slug_link_atual, '~') . '(?:/|$)~i', $__bb_reqPath)
+=======
+        (bool)preg_match('~^/loja/' . preg_quote($bb_slug_link_atual, '~') . '(?:/|$)~i', $__bb_routePath)
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
         || !empty($_GET['loja'])
         || !empty($_POST['loja']);
 }
@@ -405,6 +448,19 @@ $bb_recaptcha_secret_key_v3_master = trim((string)($bb_recaptcha_config_master['
 $bb_recaptcha_site_key_master = ($bb_recaptcha_tipo_master === 'v2') ? $bb_recaptcha_site_key_v2_master : $bb_recaptcha_site_key_v3_master;
 $bb_recaptcha_secret_key_master = ($bb_recaptcha_tipo_master === 'v2') ? $bb_recaptcha_secret_key_v2_master : $bb_recaptcha_secret_key_v3_master;
 
+<<<<<<< HEAD
+=======
+// As chaves públicas do domínio de produção não aceitam localhost.
+// No XAMPP, não carrega o widget para evitar o erro visual de domínio inválido.
+$bb_host_recaptcha = strtolower(preg_replace('/:\\d+$/', '', (string)($_SERVER['HTTP_HOST'] ?? '')));
+$bb_ambiente_local = in_array($bb_host_recaptcha, array('localhost', '127.0.0.1', '::1'), true)
+    || substr($bb_host_recaptcha, -5) === '.test';
+if ($bb_ambiente_local) {
+    $bb_recaptcha_site_key_master = '';
+    $bb_recaptcha_secret_key_master = '';
+}
+
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
 if (!defined('RECAPTCHA_TIPO')) define('RECAPTCHA_TIPO', $bb_recaptcha_tipo_master);
 if (!defined('RECAPTCHA_SITE_KEY')) define('RECAPTCHA_SITE_KEY', $bb_recaptcha_site_key_master);
 if (!defined('RECAPTCHA_SECRET_KEY')) define('RECAPTCHA_SECRET_KEY', $bb_recaptcha_secret_key_master);
@@ -871,7 +927,11 @@ if (!defined('RECAPTCHA_SECRET_KEY_V3')) define('RECAPTCHA_SECRET_KEY_V3', $bb_r
 <div class="bb-header-wrap">
     <div class="bb-header">
         <a class="bb-brand" href="<?php echo $link_home; ?>">
+<<<<<<< HEAD
             <img src="<?php echo htmlspecialchars($caminho_logo . '?v=' . $bb_logo_ver, ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars($nome_sistema, ENT_QUOTES, 'UTF-8'); ?>" width="180" height="44" fetchpriority="high" decoding="async" onerror="this.onerror=null;this.src='/sistema/img/logo.png?v=<?php echo $bb_logo_ver; ?>';">
+=======
+            <img src="<?php echo htmlspecialchars($caminho_logo . '?v=' . $bb_logo_ver, ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars($nome_sistema, ENT_QUOTES, 'UTF-8'); ?>" width="180" height="44" fetchpriority="high" decoding="async" onerror="this.onerror=null;this.src='<?php echo htmlspecialchars($bb_base . '/sistema/img/logo.png?v=' . $bb_logo_ver, ENT_QUOTES, 'UTF-8'); ?>';">
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
         </a>
 
         <nav class="bb-nav" aria-label="Menu principal">
@@ -898,7 +958,11 @@ if (!defined('RECAPTCHA_SECRET_KEY_V3')) define('RECAPTCHA_SECRET_KEY_V3', $bb_r
 <aside class="bb-mobile" id="bbMobileMenu" aria-label="Menu mobile">
     <div class="bb-m-head">
         <div style="display:flex;align-items:center;gap:10px;">
+<<<<<<< HEAD
             <img src="<?php echo htmlspecialchars($caminho_logo . '?v=' . $bb_logo_ver, ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars($nome_sistema, ENT_QUOTES, 'UTF-8'); ?>" width="140" height="34" decoding="async" style="height:34px;width:auto;" onerror="this.onerror=null;this.src='/sistema/img/logo.png?v=<?php echo $bb_logo_ver; ?>';">
+=======
+            <img src="<?php echo htmlspecialchars($caminho_logo . '?v=' . $bb_logo_ver, ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars($nome_sistema, ENT_QUOTES, 'UTF-8'); ?>" width="140" height="34" decoding="async" style="height:34px;width:auto;" onerror="this.onerror=null;this.src='<?php echo htmlspecialchars($bb_base . '/sistema/img/logo.png?v=' . $bb_logo_ver, ENT_QUOTES, 'UTF-8'); ?>';">
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
         </div>
         <button class="bb-m-close" type="button" onclick="bbToggleMenu(false)" aria-label="Fechar menu">
             <i class="fa-solid fa-xmark"></i>

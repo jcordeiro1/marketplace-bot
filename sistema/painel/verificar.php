@@ -16,10 +16,31 @@ if (!function_exists('bb_sess_clean_slug')) {
 }
 
 $__bb_reqPath = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
+<<<<<<< HEAD
+=======
+$__bb_scriptPath = str_replace('\\', '/', (string)($_SERVER['SCRIPT_NAME'] ?? ''));
+$__bb_systemPos = stripos($__bb_scriptPath, '/sistema/');
+$__bb_webBase = ($__bb_systemPos !== false)
+  ? rtrim(substr($__bb_scriptPath, 0, $__bb_systemPos), '/')
+  : '';
+$__bb_routePath = $__bb_reqPath;
+if ($__bb_webBase !== '' && stripos($__bb_routePath, $__bb_webBase) === 0) {
+  $__bb_routePath = substr($__bb_routePath, strlen($__bb_webBase));
+  if ($__bb_routePath === '') $__bb_routePath = '/';
+}
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
 $__bb_refPath = '';
 if (!empty($_SERVER['HTTP_REFERER'])) {
   $__bb_refPath = parse_url($_SERVER['HTTP_REFERER'], PHP_URL_PATH) ?: '';
 }
+<<<<<<< HEAD
+=======
+$__bb_refRoutePath = $__bb_refPath;
+if ($__bb_webBase !== '' && stripos($__bb_refRoutePath, $__bb_webBase) === 0) {
+  $__bb_refRoutePath = substr($__bb_refRoutePath, strlen($__bb_webBase));
+  if ($__bb_refRoutePath === '') $__bb_refRoutePath = '/';
+}
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
 // ===============================
 // 1) Detecta SLUG o mais cedo possível
 //    Prioridade: GET/POST -> /loja/<slug>/ -> REFERER (fallback)
@@ -30,9 +51,15 @@ if (!empty($_GET['loja'])) {
 } elseif (!empty($_POST['loja'])) {
   $__bb_reqSlug = bb_sess_clean_slug($_POST['loja']);
 } else {
+<<<<<<< HEAD
   if (preg_match('~^/loja/([a-z0-9_-]+)(?:/|$)~i', $__bb_reqPath, $mSlug)) {
     $__bb_reqSlug = bb_sess_clean_slug($mSlug[1]);
   } elseif (!empty($__bb_refPath) && preg_match('~^/loja/([a-z0-9_-]+)(?:/|$)~i', $__bb_refPath, $mSlug2)) {
+=======
+  if (preg_match('~^/loja/([a-z0-9_-]+)(?:/|$)~i', $__bb_routePath, $mSlug)) {
+    $__bb_reqSlug = bb_sess_clean_slug($mSlug[1]);
+  } elseif (!empty($__bb_refRoutePath) && preg_match('~^/loja/([a-z0-9_-]+)(?:/|$)~i', $__bb_refRoutePath, $mSlug2)) {
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
     $__bb_reqSlug = bb_sess_clean_slug($mSlug2[1]);
   }
 }
@@ -55,10 +82,17 @@ $__bb_hasMasterCookie = !empty($_COOKIE['BB_MASTER']);
 // 3) Define contexto (MASTER x TENANT)
 //    Regra segura: /sistema (raiz) SEM /loja/ e SEM ?loja= => MASTER
 // ===============================
+<<<<<<< HEAD
 $__bb_lojaByPath = (bool)preg_match('~^/loja/([a-z0-9_-]+)(?:/|$)~i', $__bb_reqPath)
                 || (bool)preg_match('~^/loja/([a-z0-9_-]+)(?:/|$)~i', $__bb_refPath);
 $__bb_hasLojaParam = (!empty($_GET['loja']) || !empty($_POST['loja']));
 $__bb_isSistemaRoot = (strpos($__bb_reqPath, '/sistema') === 0); // raiz do sistema (admin)
+=======
+$__bb_lojaByPath = (bool)preg_match('~^/loja/([a-z0-9_-]+)(?:/|$)~i', $__bb_routePath)
+                || (bool)preg_match('~^/loja/([a-z0-9_-]+)(?:/|$)~i', $__bb_refRoutePath);
+$__bb_hasLojaParam = (!empty($_GET['loja']) || !empty($_POST['loja']));
+$__bb_isSistemaRoot = (strpos($__bb_routePath, '/sistema') === 0); // raiz do sistema (admin)
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
 
 $__bb_forceMaster = ($__bb_isSistemaRoot && !$__bb_lojaByPath && !$__bb_hasLojaParam);
 
@@ -171,11 +205,16 @@ header('Content-Type: text/html; charset=utf-8');
 // DETECTA SLUG (TENANT)
 // - regra importante: /sistema/* não pode "grudar" no tenant_slug da sessão
 // ============================
+<<<<<<< HEAD
 $path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
 $refPath = '';
 if (!empty($_SERVER['HTTP_REFERER'])) {
   $refPath = parse_url($_SERVER['HTTP_REFERER'], PHP_URL_PATH) ?: '';
 }
+=======
+$path = $__bb_routePath;
+$refPath = $__bb_refRoutePath;
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
 $isSystemRoot = (strpos($path, '/sistema/') === 0);
 
 $slug = '';
@@ -219,7 +258,12 @@ if ($slug !== '') {
 }
 
 // url do login correto
+<<<<<<< HEAD
 $login = ($slug !== '') ? ("/loja/" . rawurlencode($slug) . "/sistema/") : "/sistema/";
+=======
+$login = rtrim($__bb_webBase, '/')
+  . (($slug !== '') ? ("/loja/" . rawurlencode($slug) . "/sistema/") : "/sistema/");
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
 
 // mesmas regras do seu sistema (não muda lógica)
 if (empty($_SESSION['id'])) {

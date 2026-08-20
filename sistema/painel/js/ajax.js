@@ -32,7 +32,11 @@ function bb_get_loja_slug() {
 
     // 1) extrai do path atual (/loja/{slug}/...)
     var path = (window.location && window.location.pathname) ? window.location.pathname : '';
+<<<<<<< HEAD
     var m = path.match(/^\/loja\/([^\/]+)(?:\/|$)/i);
+=======
+    var m = path.match(/(?:^|\/)loja\/([^\/]+)(?:\/|$)/i);
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
     if (m && m[1]) return bb_cache_loja_slug(m[1]);
 
     // 2) fallback: slug cacheado (quando algum link/AJAX caiu sem /loja/{slug}/ na URL)
@@ -54,6 +58,7 @@ function bb_get_base_painel() {
     var path = (window.location && window.location.pathname) ? window.location.pathname : '';
 
     // tenant (padrão marketplace): /loja/{slug}/painel
+<<<<<<< HEAD
     var m = path.match(/^\/loja\/([^\/]+)\/painel(\/|$)/i);
     if (m && m[1]) return '/loja/' + bb_cache_loja_slug(m[1]) + '/painel';
 
@@ -63,6 +68,24 @@ function bb_get_base_painel() {
 
     // admin (master): /sistema/painel
     return '/sistema/painel';
+=======
+    var m = path.match(/^(.*?)\/loja\/([^\/]+)\/painel(?:\/|$)/i);
+    if (m && m[2]) return m[1] + '/loja/' + bb_cache_loja_slug(m[2]) + '/painel';
+
+    // fallback: se estiver em /loja/{slug}/... (mesmo fora do /painel), mantém base tenant
+    var slug = bb_get_loja_slug();
+    if (slug && path.match(/(?:^|\/)loja\//i)) {
+        var tenantMatch = path.match(/^(.*?)\/loja\//i);
+        var tenantPrefix = tenantMatch ? tenantMatch[1] : '';
+        return tenantPrefix + '/loja/' + slug + '/painel';
+    }
+
+    // admin (master): preserva a subpasta do projeto no XAMPP.
+    // Exemplos: /sistema/painel ou /marketplace/sistema/painel.
+    var adminMatch = path.match(/^(.*?)\/sistema\/painel(?:\/|$)/i);
+    var adminPrefix = adminMatch ? adminMatch[1] : '';
+    return adminPrefix + '/sistema/painel';
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
 }
 
 // expõe base do painel (usado por módulos)

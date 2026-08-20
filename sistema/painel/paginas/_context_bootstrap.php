@@ -85,6 +85,21 @@ if (!function_exists('bb_pages_abort')) {
 }
 
 $__bb_reqPath = (string)(parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/');
+<<<<<<< HEAD
+=======
+$__bb_scriptPath = str_replace('\\', '/', (string)($_SERVER['SCRIPT_NAME'] ?? ''));
+$__bb_systemPos = stripos($__bb_scriptPath, '/sistema/');
+$__bb_webBase = ($__bb_systemPos !== false)
+    ? rtrim(substr($__bb_scriptPath, 0, $__bb_systemPos), '/')
+    : '';
+$__bb_routePath = $__bb_reqPath;
+if ($__bb_webBase !== '' && stripos($__bb_routePath, $__bb_webBase) === 0) {
+    $__bb_routePath = substr($__bb_routePath, strlen($__bb_webBase));
+    if ($__bb_routePath === '') {
+        $__bb_routePath = '/';
+    }
+}
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
 $__bb_refPath = ''; // Deliberadamente vazio: referer não define contexto.
 
 $__bb_slugGet = isset($_GET['loja']) ? bb_pages_clean_slug($_GET['loja']) : '';
@@ -95,7 +110,11 @@ if ($__bb_slugGet !== '' && $__bb_slugPost !== '' && $__bb_slugGet !== $__bb_slu
 }
 
 $__bb_reqSlug = $__bb_slugPost !== '' ? $__bb_slugPost : $__bb_slugGet;
+<<<<<<< HEAD
 if ($__bb_reqSlug === '' && preg_match('~^/loja/([a-z0-9_-]+)(?:/|$)~i', $__bb_reqPath, $__bbMatchSlug)) {
+=======
+if ($__bb_reqSlug === '' && preg_match('~^/loja/([a-z0-9_-]+)(?:/|$)~i', $__bb_routePath, $__bbMatchSlug)) {
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
     $__bb_reqSlug = bb_pages_clean_slug($__bbMatchSlug[1]);
 }
 
@@ -145,10 +164,17 @@ if (!in_array($__bb_ctx, ['tenant', 'master'], true)) {
     $__bb_ctx = '';
 }
 
+<<<<<<< HEAD
 $__bb_lojaByPath = (bool)preg_match('~^/loja/([a-z0-9_-]+)(?:/|$)~i', $__bb_reqPath);
 $__bb_hasLoja = $__bb_reqSlug !== '' || $__bb_lojaByPath || $__bb_isTenantHost;
 $__bb_isSistema = strpos($__bb_reqPath, '/sistema') === 0;
 $__bb_isDirectPagesEndpoint = strpos($__bb_reqPath, '/sistema/painel/paginas/') === 0;
+=======
+$__bb_lojaByPath = (bool)preg_match('~^/loja/([a-z0-9_-]+)(?:/|$)~i', $__bb_routePath);
+$__bb_hasLoja = $__bb_reqSlug !== '' || $__bb_lojaByPath || $__bb_isTenantHost;
+$__bb_isSistema = strpos($__bb_routePath, '/sistema') === 0;
+$__bb_isDirectPagesEndpoint = strpos($__bb_routePath, '/sistema/painel/paginas/') === 0;
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
 $__bb_activeSessionName = session_status() === PHP_SESSION_ACTIVE ? (string)session_name() : '';
 
 $__bb_tenantSessionName = 'BB_TENANT';

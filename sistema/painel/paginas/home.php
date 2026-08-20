@@ -1,24 +1,42 @@
 <?php
 require_once __DIR__ . '/_context_bootstrap.php';
 // ======================================================================
+<<<<<<< HEAD
 // HOME DO PAINEL DA LOJA (TENANT)
 // - O mapeamento de /loja/{slug}/, subdomínio, domínio próprio ou ?loja=
 //   é centralizado exclusivamente no conexao.php.
 // - Esta página não decide sessão pelo HTTP_REFERER e não escolhe banco.
 // - O painel Master/Admin permanece isolado no Banco Global/Administrativo.
+=======
+// HOME DO PAINEL (MASTER x TENANT)
+// - O contexto e o banco já foram confirmados pelo _context_bootstrap.php.
+// - MASTER usa o Banco Global/Administrativo validado.
+// - TENANT usa exclusivamente o Banco Individual mapeado para a loja.
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
 // ======================================================================
 require_once __DIR__ . '/../../conexao.php';
 require_once __DIR__ . '/../verificar.php';
 
+<<<<<<< HEAD
 // Esta home consulta clientes, agenda, estoque e financeiro da barbearia.
 // Portanto, só pode executar quando o conexao.php confirmou um TENANT.
 $__bb_homeSessionName = (string)session_name();
 $__bb_homeTenantSlug  = trim((string)($_SESSION['tenant_slug'] ?? ''));
 $__bb_homeTenantDb    = trim((string)($_SESSION['tenant_db'] ?? ''));
+=======
+// A Home pode ser exibida no painel Master ou no painel de uma loja,
+// desde que a sessão e o PDO tenham sido confirmados pelo bootstrap central.
+$__bb_homeSessionName = (string)session_name();
+$__bb_homeTenantSlug  = trim((string)($_SESSION['tenant_slug'] ?? ''));
+$__bb_homeTenantDb    = trim((string)($_SESSION['tenant_db'] ?? ''));
+$__bb_homeHasPdo      = isset($pdo) && $pdo instanceof PDO;
+$__bb_homeIsMaster    = $__bb_homeSessionName === 'BB_MASTER' && $__bb_homeHasPdo;
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
 $__bb_homeIsTenant    = (
     strpos($__bb_homeSessionName, 'BB_TENANT') === 0
     && $__bb_homeTenantSlug !== ''
     && $__bb_homeTenantDb !== ''
+<<<<<<< HEAD
     && isset($pdo)
     && $pdo instanceof PDO
 );
@@ -40,6 +58,31 @@ if ($__bb_homeConnectedDb === '' || $__bb_homeConnectedDb !== $__bb_homeTenantDb
     http_response_code(500);
     echo 'Falha de isolamento: o banco individual da loja não foi confirmado.';
     exit();
+=======
+    && $__bb_homeHasPdo
+);
+
+if (!$__bb_homeIsMaster && !$__bb_homeIsTenant) {
+    http_response_code(403);
+    echo 'Acesso negado: o contexto do painel não foi confirmado.';
+    exit();
+}
+
+// Para TENANT, reforça que o PDO continua no Banco Individual da loja.
+// No MASTER, essa validação já foi concluída pelo _context_bootstrap.php.
+if ($__bb_homeIsTenant) {
+    try {
+        $__bb_homeConnectedDb = trim((string)$pdo->query('SELECT DATABASE()')->fetchColumn());
+    } catch (Throwable $e) {
+        $__bb_homeConnectedDb = '';
+    }
+
+    if ($__bb_homeConnectedDb === '' || $__bb_homeConnectedDb !== $__bb_homeTenantDb) {
+        http_response_code(500);
+        echo 'Falha de isolamento: o banco individual da loja não foi confirmado.';
+        exit();
+    }
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
 }
 
 //verificar se ele tem a permissão de estar nessa página
@@ -572,4 +615,8 @@ $dados_meses_vendas =  '';
 
     </script>
 	<!-- //for index page weekly sales java script -->
+<<<<<<< HEAD
 	
+=======
+	
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)

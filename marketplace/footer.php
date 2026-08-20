@@ -195,20 +195,32 @@ if ($__tenantFromUri !== '') {
     $__bb_footerTenantBySlugPath =
         (bool)preg_match(
             '~^/loja/' . preg_quote($__tenantFromUri, '~') . '(?:/|$)~i',
+<<<<<<< HEAD
             $__bb_reqPath
+=======
+            (isset($__bb_routePath) ? $__bb_routePath : $__bb_reqPath)
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
         )
         || !empty($_GET['loja'])
         || !empty($_POST['loja']);
 }
 
+<<<<<<< HEAD
 $__bb_footerTenantPrefix = '';
 if ($__tenantFromUri !== '' && $__bb_footerTenantBySlugPath) {
     $__bb_footerTenantPrefix = '/loja/' . rawurlencode($__tenantFromUri);
+=======
+$__bb_footerAppPrefix = isset($bb_web_base) ? rtrim((string)$bb_web_base, '/') : '';
+$__bb_footerTenantPrefix = '';
+if ($__tenantFromUri !== '' && $__bb_footerTenantBySlugPath) {
+    $__bb_footerTenantPrefix = $__bb_footerAppPrefix . '/loja/' . rawurlencode($__tenantFromUri);
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
 }
 
 if ($__tenantFromUri !== '') {
     $link_sistema = ($__bb_footerTenantPrefix !== '')
         ? ($__bb_footerTenantPrefix . '/sistema/')
+<<<<<<< HEAD
         : '/sistema/';
 
     $bb_cadastrar_endpoint = ($__bb_footerTenantPrefix !== '')
@@ -226,6 +238,25 @@ $bb_footer_servicos_link = ($__tenantFromUri !== '')
 $bb_footer_produtos_link = ($__tenantFromUri !== '')
     ? (($__bb_footerTenantPrefix !== '') ? ($__bb_footerTenantPrefix . '/produtos/') : '/produtos/')
     : '/marketplace.php#bbGrid';
+=======
+        : ($__bb_footerAppPrefix . '/sistema/');
+
+    $bb_cadastrar_endpoint = ($__bb_footerTenantPrefix !== '')
+        ? ($__bb_footerTenantPrefix . '/cadastrar.php')
+        : ($__bb_footerAppPrefix . '/cadastrar.php?loja=' . rawurlencode($__tenantFromUri));
+} else {
+    $link_sistema = $__bb_footerAppPrefix . '/sistema/';
+    $bb_cadastrar_endpoint = $__bb_footerAppPrefix . '/cadastrar.php';
+}
+
+$bb_footer_servicos_link = ($__tenantFromUri !== '')
+    ? (($__bb_footerTenantPrefix !== '') ? ($__bb_footerTenantPrefix . '/servicos/') : ($__bb_footerAppPrefix . '/servicos/'))
+    : ($__bb_footerAppPrefix . '/marketplace.php#bbGrid');
+
+$bb_footer_produtos_link = ($__tenantFromUri !== '')
+    ? (($__bb_footerTenantPrefix !== '') ? ($__bb_footerTenantPrefix . '/produtos/') : ($__bb_footerAppPrefix . '/produtos/'))
+    : ($__bb_footerAppPrefix . '/marketplace.php#bbGrid');
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
 
 // ✅ Base URL absoluta para montar logo/ícone sem quebrar em /marketplace.php/ e /loja/{slug}/.
 $bb_proto = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
@@ -236,7 +267,13 @@ if (!empty($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
     }
 }
 $bb_host = (string)($_SERVER['HTTP_HOST'] ?? '');
+<<<<<<< HEAD
 $bb_base = ($bb_host !== '') ? ($bb_proto . '://' . $bb_host) : '';
+=======
+if (!isset($bb_base) || trim((string)$bb_base) === '') {
+    $bb_base = ($bb_host !== '') ? ($bb_proto . '://' . $bb_host . $__bb_footerAppPrefix) : $__bb_footerAppPrefix;
+}
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
 
 // ✅ Caminhos públicos para logo/ícone vindos da tabela config do contexto atual.
 // MASTER: jctecbr_master.config | TENANT: banco individual da loja (/loja/{slug}/).
@@ -640,13 +677,21 @@ $bb_footer_texto_exibir = !empty($texto_rodape) ? $texto_rodape : $bb_footer_tex
                 </li>
                 <?php if (empty($__tenantFromUri)) { ?>
                 <li>
+<<<<<<< HEAD
                     <a href="/marketplace.php">
+=======
+                    <a href="<?php echo htmlspecialchars($__bb_footerAppPrefix . '/marketplace.php', ENT_QUOTES, 'UTF-8'); ?>">
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
                         <i class="fa-solid fa-store"></i> 
                         <span>Marketplace</span>
                     </a>
                 </li>
                 <li>
+<<<<<<< HEAD
                     <a href="/marketplace.php#bbGrid">
+=======
+                    <a href="<?php echo htmlspecialchars($__bb_footerAppPrefix . '/marketplace.php#bbGrid', ENT_QUOTES, 'UTF-8'); ?>">
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
                          <i class="fa-solid fa-magnifying-glass"></i> 
                         <span>Buscar profissionais</span>
                     </a>
@@ -1309,8 +1354,13 @@ function bbAbrirCookieBoxSeNecessario() {
     if (carregando) return;
 
     carregando = true;
+<<<<<<< HEAD
     addScript('/js/jquery-3.4.1.min.js?v=20260526-green', function(){
       addScript('/js/bootstrap.js?v=20260526-green', finalizar);
+=======
+    addScript(<?php echo json_encode($__bb_footerAppPrefix . '/js/jquery-3.4.1.min.js?v=20260526-green'); ?>, function(){
+      addScript(<?php echo json_encode($__bb_footerAppPrefix . '/js/bootstrap.js?v=20260526-green'); ?>, finalizar);
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
     });
   };
 
@@ -1584,6 +1634,12 @@ if ($bb_footer_is_home_recaptcha) {
 </script>
 <?php endif; ?>
 
+<<<<<<< HEAD
 <script defer src="/marketplace/custom.js?v=20260526-green"></script>
 </body>
 </html>
+=======
+<script defer src="<?php echo htmlspecialchars($__bb_footerAppPrefix . '/marketplace/custom.js?v=20260526-green', ENT_QUOTES, 'UTF-8'); ?>"></script>
+</body>
+</html>
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)

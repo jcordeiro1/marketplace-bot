@@ -18,7 +18,27 @@
 // - Em chamadas internas sem slug explícito (ex: /ajax/*), se existir apenas 1 cookie BB_TENANT_*,
 //   ele é usado. Se houver mais de 1, o ideal é a chamada vir com /loja/<slug>/... (padrão do painel).
 
+<<<<<<< HEAD
 $__bb_reqPath = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
+=======
+$__bb_reqPathOriginal = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
+$__bb_documentRoot = realpath((string)($_SERVER['DOCUMENT_ROOT'] ?? '')) ?: '';
+$__bb_projectRoot = realpath(dirname(__DIR__)) ?: dirname(__DIR__);
+$__bb_webBase = '';
+if ($__bb_documentRoot !== '') {
+  $__bb_documentRoot = str_replace('\\', '/', rtrim($__bb_documentRoot, '/\\'));
+  $__bb_projectRoot = str_replace('\\', '/', rtrim($__bb_projectRoot, '/\\'));
+  if (stripos($__bb_projectRoot, $__bb_documentRoot) === 0) {
+    $__bb_webBase = '/' . trim(substr($__bb_projectRoot, strlen($__bb_documentRoot)), '/');
+    if ($__bb_webBase === '/') $__bb_webBase = '';
+  }
+}
+$__bb_reqPath = $__bb_reqPathOriginal;
+if ($__bb_webBase !== '' && stripos($__bb_reqPath, $__bb_webBase) === 0) {
+  $__bb_reqPath = substr($__bb_reqPath, strlen($__bb_webBase));
+  if ($__bb_reqPath === '') $__bb_reqPath = '/';
+}
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
 
 if (!function_exists('bb_sess_clean_slug')) {
   function bb_sess_clean_slug($v) {
@@ -1817,4 +1837,7 @@ if (!$__bb_runtimeTenant && $__bb_ativoNormalizado !== 'Sim' && $__bb_ativoNorma
     exit;
   }
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 717a9f6 (Projeto BarberBot marketplace)
