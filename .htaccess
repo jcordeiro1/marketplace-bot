@@ -104,6 +104,8 @@ RewriteRule ^loja/([a-z0-9_-]+)/prof/painel$ /loja/$1/prof/painel/ [R=301,L,NC]
 =======
 RewriteRule ^app/painel/(.+)$ /marketplace/loja/%2/prof/painel/$1? [R=301,L,NE]
 
+RewriteRule ^index/(.+)$ index.php/$1? [R=301,L,NE]
+
 # força barra final no painel do profissional
 RewriteRule ^loja/([a-z0-9_-]+)/prof/painel$ /marketplace/loja/$1/prof/painel/ [R=301,L,NC]
 >>>>>>> 717a9f6 (Projeto BarberBot marketplace)
